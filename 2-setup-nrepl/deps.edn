@@ -1,0 +1,7 @@
+{:aliases
+  {:repl {:extra-deps
+          {
+           ;; CIDER compatible nREPL
+           org.clojure/tools.nrepl {:mvn/version "0.2.12"}
+           cider/cider-nrepl {:mvn/version "0.16.0"}
+           proto-repl {:mvn/version "0.3.1"}}}}}
