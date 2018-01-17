@@ -9,7 +9,7 @@
   [data]
   (json/read-str data :key-fn keyword))
 
-(defn display-entry
+(defn display-post
   "Display a human readable entry format"
   [entry]
   (println (:title entry))
@@ -30,14 +30,15 @@
   (->> "https://www.reddit.com/r/clojure.json?limit=5"
        client/get))
 
-(defn parse-posts
+(defn display-posts
+  "Parse reddit "
   [posts]
   (->> (:body posts)
       parse-json
       :data
       :children
-      (map (comp display-entry prefix-link :data))))
+      (map (comp display-post prefix-link :data))))
 
 (defn -main
   []
-  (doall (parse-posts (fetch-reddit-posts))))
+  (doall (display-posts (fetch-reddit-posts))))
