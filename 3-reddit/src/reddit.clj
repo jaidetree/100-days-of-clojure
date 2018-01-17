@@ -28,15 +28,16 @@
   []
   (println "Fetching reddit posts in r/clojure...\n")
   (->> "https://www.reddit.com/r/clojure.json?limit=5"
-       client/get
-       :body
-       parse-json
-       :data
-       :children
-       (map (comp display-entry prefix-link :data))
-       doall))
+       client/get))
 
+(defn parse-posts
+  [posts]
+  (->> (:body posts)
+      parse-json
+      :data
+      :children
+      (map (comp display-entry prefix-link :data))))
 
 (defn -main
   []
-  (fetch-reddit-posts))
+  (doall (parse-posts (fetch-reddit-posts))))
