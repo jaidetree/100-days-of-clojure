@@ -31,9 +31,9 @@
        client/get))
 
 (defn display-posts
-  "Parse reddit "
-  [posts]
-  (->> (:body posts)
+  "Parse reddit posts and display each post"
+  [response]
+  (->> (:body response)
       parse-json
       :data
       :children
