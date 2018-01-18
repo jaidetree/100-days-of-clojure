@@ -8,7 +8,7 @@
 
 (defn create-nrepl-port-file
   [port]
-  (let [nrepl-port-file (io/file ".nrepl-port")]
+  (let [nrepl-port-file (io/file "../.nrepl-port")]
     (spit nrepl-port-file (str port))
     (.addShutdownHook (Runtime/getRuntime)
                       (Thread. #(io/delete-file nrepl-port-file true)))))

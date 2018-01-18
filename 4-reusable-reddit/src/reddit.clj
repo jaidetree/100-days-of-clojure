@@ -1,6 +1,6 @@
 (ns reddit
   (:require [clj-http.client :as client]))
-              ;[reddit :refer [fetch-reddit-posts]]
+              ;[reddit :refer [fetch-reddit-posts]]))
 
 (defn fetch-json
   "Fetch url and return json map"
