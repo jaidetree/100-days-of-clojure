@@ -40,5 +40,3 @@
         (async/to-chan)
         (channel-map :data)
         (channel-for-each print-post)))
-
-(-main)
