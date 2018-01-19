@@ -37,6 +37,6 @@
 (defn -main
   []
   (->> (get-reddit-posts "limit=5")
-        (async/to-chan)
-        (channel-map :data)
-        (channel-for-each print-post)))
+       (async/to-chan)
+       (channel-map :data)
+       (channel-for-each print-post)))
