@@ -16,15 +16,29 @@
     (println (display-fn post)))
   (println "\n"))
 
+;; While these are certainly reusable are they necessary?
+(defn channel-for-each
+  "Takes a side-effect function and a channel and calls the side effect on
+  each item in the channel."
+  [each-fn channel]
+  (async/go-loop []
+    (when-let [item (async/<! channel)]
+      (each-fn item)
+      (recur))))
+
+(defn channel-map
+  "Take a map-fn and a source channel and returns a channel with map-fn
+  applied to each element of source channel"
+  [map-fn from-channel]
+  (async/pipe
+    from-channel
+    (async/chan 1 (map map-fn))))
+
 (defn -main
   []
-  (as-> (get-reddit-posts "limit=5") $
-        (async/to-chan $)
-        ;; replace with transduce
-        (async/pipe $ (async/chan 1 (map :data)))
-        (async/go-loop []
-          (when-let [post (async/<! $)]
-            (print-post post)
-            (recur)))))
+  (->> (get-reddit-posts "limit=5")
+        (async/to-chan)
+        (channel-map :data)
+        (channel-for-each print-post)))
 
 (-main)
