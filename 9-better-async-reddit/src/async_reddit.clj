@@ -1,10 +1,7 @@
 (ns async-reddit
   (:require [reddit :refer [get-reddit-posts]]
-            [clojure.core.async :as async]))
-
-(defn get-post-link
-  [post]
-  (str "https://reddit.com" (:permalink post)))
+            [clojure.core.async :as async]
+            [clojure.pprint :refer [pprint pp]]))
 
 (defn get-post-footer
   [post]
@@ -12,7 +9,7 @@
 
 (defn print-post
   [post]
-  (doseq [display-fn [:title get-post-link get-post-footer]]
+  (doseq [display-fn [:title :url get-post-footer]]
     (println (display-fn post)))
   (println "\n"))
 
