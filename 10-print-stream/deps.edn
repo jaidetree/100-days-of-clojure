@@ -1,0 +1,4 @@
+{:deps
+  {dev.repl {:local/root "../shared"}
+   org.clojure/core.async {:mvn/version "0.4.474"}
+   reddit {:local/root "../4-reusable-reddit"}}}
