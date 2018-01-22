@@ -25,6 +25,7 @@
 (defn -main
   []
   (def posts-channel (async/chan 1 (map :data)))
-  (sink print-post posts-channel)
+  (def print-channel (sink print-post posts-channel))
   (async/onto-chan posts-channel
-    (get-reddit-posts "limit=5")))
+    (get-reddit-posts "limit=5"))
+  (async/<!! print-channel))
