@@ -11,7 +11,7 @@
            (java.util Collections HashMap Map)
            (org.w3c.dom NamedNodeMap Node NodeList)))
 
-;; [X] Return a channel that emits the reader
+;; - [X] TODO: Return a channel that emits the reader
 (defn read!
   "Takes a string pointing to a file path and returns a channel that
   eventually gets an ImageIO reader"
@@ -24,8 +24,12 @@
       (async/>! reader-chan reader))
     (reader-chan)))
 
-;; [X] Create a new buffered image
-;;     new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB)
+;; - [X] TODO: Create a new buffered image
+;;             new BufferedImage(
+;;               image.getWidth(),
+;;               image.getHeight(),
+;;               BufferedImage.TYPE_INT_ARGB
+;;             )
 (defn frame->image
   "Takes a frame {:index :frame :meta} and returns a new BufferedImage"
   [{:keys [index frame meta]}]
@@ -77,4 +81,4 @@
         (recur (inc index))))
     frames))
 
-;; TODO: Create a function that ties all the above functions together
+;; - [ ] TODO: Create a function that ties all the above functions together
