@@ -82,6 +82,13 @@
     (.drawImage graphics image (:x meta) (:y meta) nil)
     image))
 
+(defn -parse-frame
+  [reader index]
+  (let [meta (.getImageMetadata reader index)]
+    {:index index
+     :frame (.read reader index)
+     :meta (-parse-meta meta)}))
+
 (defn read-frames
   "Takes a gif image reader channel and returns a channel of {:index :frame :meta} for
   each frame in a gif"
@@ -89,15 +96,12 @@
   (let [frames-channel (async/chan)]
     (async/go
       (let [reader (async/<! reader-channel)
-            total-frames (.getNumImages reader true)]
-        (as-> (iterate inc 0) $
-              (take total-frames $)
-              (map (fn [index] {:index index
-                                :frame (.read reader index)
-                                :meta (-parse-meta (.getImageMetadata reader index))})
-                   $)
-              (doseq [frame $]
-                (async/>! frames-channel frame)))
+            total-frames (.getNumImages reader true)
+            frames (->> (iterate inc 0)
+                        (take total-frames)
+                        (map #(-parse-frame reader %1)))]
+        (doseq [frame frames]
+          (async/>! frames-channel frame))
         (async/close! frames-channel)))
     frames-channel))
 
