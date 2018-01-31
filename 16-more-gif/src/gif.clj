@@ -79,7 +79,7 @@
                 (.getHeight frame)
                 (BufferedImage/TYPE_INT_ARGB))
         graphics (.getGraphics image)]
-    (.drawImage graphics image (:x meta) (:y meta) nil)
+    (.drawImage graphics image (:x meta 0) (:y meta 0) nil)
     image))
 
 (defn -parse-frame
