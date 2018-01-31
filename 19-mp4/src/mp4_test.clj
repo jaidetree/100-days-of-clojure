@@ -16,6 +16,8 @@
   (encode! frames {:filename filename
                    :framerate 10}))
 
+;; - [ ] TODO: Let's try writing each gif frame to a separate image file
+;;             to make sure we're reading it right.
 (defn -main
   [gif-src-file mp4-dest-file]
   (println gif-src-file)
