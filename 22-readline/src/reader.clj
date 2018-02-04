@@ -1,7 +1,8 @@
 (ns reader)
 
 (declare pizza-prompt)
-(defn count-pizzas
+
+(defn slices->pies
   [n-slices-str]
   (try
     (let [n-slices (Long. n-slices-str)]
@@ -14,7 +15,7 @@
 (defn pizza-prompt
   []
   (println "How many pizza slices?")
-  (when-let [pizzas (count-pizzas (read-line))]
+  (when-let [pizzas (slices->pies (read-line))]
     (println
      (cond
         (= pizzas 1) "Ok, 1 pizza 🍕  coming right up!"
