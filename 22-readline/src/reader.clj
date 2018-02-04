@@ -3,12 +3,14 @@
 (declare pizza-prompt)
 
 (defn slices->pies
+  "Accepts a number of slices up until 9223372036854775807"
   [n-slices-str]
   (try
     (let [n-slices (Long. n-slices-str)]
       (long (Math/ceil (/ n-slices 8))))
     (catch Exception e
-      (println "I didn't catch that.")
+      (println "Whoa! I didn't catch that.")
+      (println "Tell us how many slices you want. We can handle any whole number up to 9223372036854775807 slices.")
       (pizza-prompt)
       nil)))
 
