@@ -7,8 +7,9 @@ My 2018 100 Days of Code Project
 - [X] Core Async
 - [X] Threading
 - [X] Lazy Sequences
+- [X] Read Stdin
+- [X] Error Handling
 - [/] Image Processing
 - [ ] Web Server
 - [ ] Transducers
-- [ ] Read Stdin
-- [ ] Error Handling
+- [ ] Atoms
