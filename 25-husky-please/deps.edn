@@ -1,0 +1,4 @@
+{:deps
+  {repl {:local/root "../shared"}
+   clj-http {:mvn/version "3.7.0"}
+   cheshire {:mvn/version "5.8.0"}}}

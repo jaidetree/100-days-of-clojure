@@ -27,6 +27,7 @@
           (filter #(.hasTripUpdate %) $)
           (map #(.getTripUpdate %) $)
           (doseq [item $]
+            (println item)
             (spit "data.secret.txt" item :append true)))))
 
 (-main)
