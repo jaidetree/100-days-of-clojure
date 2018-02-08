@@ -21,7 +21,7 @@
    Returns a sequence."
   [condition? value coll]
   (if condition?
-    (append value coll)
+    (concat [value] coll)
     coll))
 
 (defn repeat-for
@@ -73,6 +73,7 @@
         "space-%d-max-party"
         "space-%d-seated"
         ""]
+       (append-when (> space-index 1) "space-%d-exists")
        (render [space-index])
        (concat-after (repeat-for 1 4 create-space-photo space-index))
        (concat-after (repeat-for 1 2 create-space-rule space-index))))

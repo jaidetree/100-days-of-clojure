@@ -1,7 +1,7 @@
 (ns mta
   (:require [clj-http.client :as client]
             [cheshire.core :as json])
-  (:import (com.google.transit.realtime GtfsRealtime$FeedMessage)))
+  (:import (com.google.transit.realtime GtfsRealtime$FeedMessage NyctSubway)))
 
 (defn get-config
   [filename]
@@ -26,8 +26,7 @@
           (str->feed $)
           (filter #(.hasTripUpdate %) $)
           (map #(.getTripUpdate %) $)
+          (take 1 $)
           (doseq [item $]
-            (println item)
+            (println (.trip_id item))
             (spit "data.secret.txt" item :append true)))))
-
-(-main)

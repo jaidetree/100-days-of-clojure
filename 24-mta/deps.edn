@@ -2,4 +2,5 @@
   {repl {:local/root "../shared"}
    clj-http {:mvn/version "3.7.0"}
    cheshire {:mvn/version "5.8.0"}
-   com.google.transit/gtfs-realtime-bindings {:mvn/version "0.0.4"}}}
+   com.google.transit/gtfs-realtime-bindings {:mvn/version "0.0.4"}}
+ :paths ["src" "src/java"]}
