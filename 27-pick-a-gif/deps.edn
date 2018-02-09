@@ -1,0 +1,5 @@
+{:deps
+  {dev.repl {:local/root "../shared"}
+   conf {:local/root "../26-conf-reader"}
+   clj-http {:mvn/version "3.7.0"}
+   cheshire {:mvn/version "5.8.0"}}}
