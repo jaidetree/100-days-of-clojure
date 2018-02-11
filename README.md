@@ -12,5 +12,5 @@ My 2018 100 Days of Code Project
 - [/] Image Processing
 - [ ] Web Server
 - [ ] Transducers
-- [ ] Atoms
+- [X] Atoms
 - [ ] ClojureScript
