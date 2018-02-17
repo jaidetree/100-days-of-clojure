@@ -40,6 +40,7 @@
 (defn create-deploy-request
   "Creates a deploy request to build server.
    Accepts...
+     - clj-http-like post function
      - branch string like \"staging\",
      - map of params allowed in deploy-opts,
      - config map read from a private server config file
@@ -47,19 +48,19 @@
    Example:
    (create-deploy-request \"staging\" {:migrate true} {:build-server \"localhost\"
                                                        :build-url \"/build\"})"
-  [branch params config]
+  [post-fn branch params config]
   (let [target-branch (get-target-branch config branch)]
     (->> {:form-params (assoc params :targetBranch target-branch)
-          :cotent-type :json
-          :as :json}
-         (client/post (get-build-url config))
+          :content-type :json}
+         (post-fn (get-build-url config))
          :body)))
 
 (defn request-deploy
   "Parses arguments, reads config from private config file.
    Returns JSON POST response."
-  [branch args]
+  [post-fn branch args]
   (create-deploy-request
+    post-fn
     branch
     (parse-args args)
     (second (conf/load-config! "dev.secret.edn"))))
@@ -69,4 +70,4 @@
    Accepts a branch string and a list of param strings whitelisted in deploy-opts
    Prints JSON POST response."
   [branch & args]
-  (pprint (request-deploy branch args)))
+  (pprint (request-deploy client/post branch args)))
