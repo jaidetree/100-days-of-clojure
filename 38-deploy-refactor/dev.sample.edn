@@ -1,0 +1,4 @@
+{:build-server "localhost"
+ :build-url "/build"
+ :servers {:staging "staging-server"
+           :production "master"}}
