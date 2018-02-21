@@ -21,6 +21,11 @@
   [y x]
   (print-ansi :move x y))
 
+;; Displays a progress bar like
+;; [---------------------]
+;; ...until...
+;; [=====================]
+;; NOTE - Moving the cursor appears to also reset the line
 (defn -main []
   (clear)
   (reset-cursor)
