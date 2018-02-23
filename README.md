@@ -14,4 +14,4 @@ My 2018 100 Days of Code Project
 - [ ] Transducers
 - [X] Atoms
 - [ ] ClojureScript
-- [ ] Promises
+- [X] Promises
