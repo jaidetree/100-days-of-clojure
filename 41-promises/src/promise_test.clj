@@ -3,6 +3,9 @@
 (defn -main
   []
   (let [p (promise)]
+    (future
+     (println @p))
     (Thread/sleep 1000)
-    (future (println @p))
-    (deliver p "hello world")))
+    (deliver p "hello world")
+    (Thread/sleep 10)
+    (System/exit 0)))
