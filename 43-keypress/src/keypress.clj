@@ -1,16 +1,18 @@
 (ns keypress
+  (:require [clojure.core.async :as async])
   (:import jline.Terminal))
 
-(def keypress
-  (future (.readCharacter (Terminal/getTerminal) System/in)))
+(def keypress (async/chan 1))
 
 (defn prompt []
   (println "Awaiting char...\n")
-  (Thread/sleep 2000)
-  (if-not (realized? keypress)
-    (recur)
-    (println "key: " @keypress)))
+  (async/go-loop []
+    (when-let [char (.readCharacter (Terminal/getTerminal) System/in)]
+      (async/>! keypress char)
+      (recur))))
 
 (defn -main [& args]
   (prompt)
-  (shutdown-agents))
+  (async/<!! (async/go-loop [char (async/<! keypress)]
+               (println (str "Key pressed: " char))
+               (recur (async/<! keypress)))))
