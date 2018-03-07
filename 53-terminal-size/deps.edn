@@ -1,0 +1,2 @@
+{:deps
+  {ansi {:local/root "../52-ansi"}}}

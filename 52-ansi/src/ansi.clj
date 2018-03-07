@@ -35,8 +35,3 @@
   "Moves the cursor to somewhere to a col, line on the screen"
   [x y]
   (print-ansi :move y x))
-
-(defn get-cursor-pos
-  "Reports the cursor position"
-  []
-  (print-ansi :pos))
