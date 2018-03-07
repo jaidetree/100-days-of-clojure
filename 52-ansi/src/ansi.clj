@@ -4,7 +4,8 @@
 
 (def ansi-codes {:clear "[2J"
                  :reset "[;H"
-                 :move "[%d;%d;H"})
+                 :move "[%d;%d;H"
+                 :pos "[6n"})
 
 (defn get-ansi-code
   [code]
@@ -34,3 +35,8 @@
   "Moves the cursor to somewhere to a col, line on the screen"
   [x y]
   (print-ansi :move y x))
+
+(defn get-cursor-pos
+  "Reports the cursor position"
+  []
+  (print-ansi :pos))

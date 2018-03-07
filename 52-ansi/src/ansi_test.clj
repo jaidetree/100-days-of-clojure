@@ -30,6 +30,11 @@
     (is (= (with-out-str (move-cursor 2 4))
            (str ESC "[4;2;H")))))
 
+(deftest get-cursor-pos-test
+  (testing "Will print a get terminal status report"
+    (is (= (with-out-str (get-cursor-pos))
+           (str ESC "[6n")))))
+
 (defn -main
   []
   (run-tests 'ansi-test))
