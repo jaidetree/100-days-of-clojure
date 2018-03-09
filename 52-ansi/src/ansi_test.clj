@@ -30,6 +30,16 @@
     (is (= (with-out-str (move-cursor 2 4))
            (str ESC "[4;2;H")))))
 
+(deftest hide-cursor-test
+  (testing "Will print a hide-cursor sequence"
+    (is (= (with-out-str (hide-cursor))
+           (str ESC "[?25l")))))
+
+(deftest show-cursor-test
+  (testing "Will print a show-cursor sequence"
+    (is (= (with-out-str (show-cursor))
+           (str ESC "[?25h")))))
+
 (defn -main
   []
   (run-tests 'ansi-test))

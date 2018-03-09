@@ -1,0 +1,4 @@
+{:deps
+  {ansi {:local/root "../52-ansi"}
+   terminal {:local/root "../54-terminal"}
+   org.clojure/core.async {:mvn/version "0.4.474"}}}

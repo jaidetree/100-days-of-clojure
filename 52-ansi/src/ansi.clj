@@ -5,7 +5,9 @@
 (def ansi-codes {:clear "[2J"
                  :reset "[;H"
                  :move "[%d;%d;H"
-                 :pos "[6n"})
+                 :pos "[6n"
+                 :hide "[?25l"
+                 :show "[?25h"})
 
 (defn get-ansi-code
   [code]
@@ -35,3 +37,13 @@
   "Moves the cursor to somewhere to a col, line on the screen"
   [x y]
   (print-ansi :move y x))
+
+(defn hide-cursor
+  "Hides the cursor from screen"
+  []
+  (print-ansi :hide))
+
+(defn show-cursor
+  "Hides the cursor from screen"
+  []
+  (print-ansi :show))
