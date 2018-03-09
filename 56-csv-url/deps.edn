@@ -1,0 +1,2 @@
+{:deps
+  {conf {:local/root "../26-conf-reader"}}}
