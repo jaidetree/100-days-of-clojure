@@ -17,7 +17,7 @@
   [arg]
   [:either :unexpected :expected arg])
 
-(defn exception?
+(defn- is-exception?
   "Returns true if arg is an instance of Exception class"
   [arg]
   (instance? Exception arg))
@@ -25,7 +25,7 @@
 (defn maybe
   "Returns an either with the excpected value if truthy or unexpected if falsey."
   [arg & args]
-  (if (and arg (not (exception? arg)))
+  (if (and arg (not (is-exception? arg)))
     (expected arg)
     (unexpected arg)))
 
@@ -43,6 +43,11 @@
   [[type unexpected-value expected-value err]]
   (and (= unexpected-value :unexpected)
        (= err :exception)))
+
+(defn exception?
+  [[type unexpected-value expected-value err]]
+  (and (= unexpected-value :unexpected)
+       (= expected-value :expected)))
 
 (defn- forward
   "Calls a given function (f) against value and returns another either with
