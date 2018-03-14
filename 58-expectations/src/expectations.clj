@@ -83,7 +83,7 @@
    (let [[type value] results]
     (if (unexpected? results)
       (forward-using unexpected f value)
-      (forward-using unexpected results)))))
+      results))))
 
 (defn on-unexpected
   "When the incoming either is unexpected use the given function to make it expected."
@@ -105,6 +105,28 @@
     (if (expected? results)
       (forward f value)
       results))))
+
+(defn to-exception
+  "When the incoming either is an exception apply the given function against
+  the exception value.
+  Returns another exception value."
+  ([f]
+   (fn [results] (to-exception f results)))
+  ([f [_ _ _ value :as results]]
+   (if (exception? results)
+       (forward-using exception f value)
+       results)))
+
+(defn on-exception
+  "When the incoming either is an exception apply the given function against
+  the exception value.
+  Returns expected either if function is applied."
+  ([f]
+   (fn [results] (on-exception f results)))
+  ([f [_ _ _ value :as results]]
+    (if (exception? results)
+        (forward f value)
+        results)))
 
 (defn when-unexpected
   "Run a predicate against the unexpected value, if return is truthy forward
