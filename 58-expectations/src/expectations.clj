@@ -110,15 +110,16 @@
   "Run a predicate against the unexpected value, if return is truthy forward
    the return to an expected value."
   [p f]
-  (fn [[type value] {:as args}]
+  (fn [[type value :as args]]
     (if (and (unexpected? args) (p value))
       (forward f value)
       args)))
 
-(defn when-expected [p f]
+(defn when-expected
   "Run a predicate against the expected value, if return is truthy forward the
    expected value."
-  (fn [[type _ value] {:as args}]
-    (if (and (expected args) (p value))
+  [p f]
+  (fn [[type unexpected value :as args]]
+    (if (and (expected? args) (p value))
       (forward f value)
-      (args))))
+      args)))

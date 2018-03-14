@@ -1,0 +1,3 @@
+{:deps
+   {expectations {:local/root "../58-expectations"}
+    dev.repl {:local/root "../shared"}}}
