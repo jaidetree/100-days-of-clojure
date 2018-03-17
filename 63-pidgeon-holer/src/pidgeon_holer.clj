@@ -1,4 +1,4 @@
-(ns pidegon-holder
+(ns pidgeon-holer
   "A error handling library that works within existing chainable constructs
    such as lazy lists, composition, transducers, and thread macros.")
 

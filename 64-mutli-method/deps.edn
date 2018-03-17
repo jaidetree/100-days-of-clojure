@@ -1,0 +1,3 @@
+{:deps
+   {dev.repl {:local/root "../shared"}
+    pidgeon-holer {:local/root "../63-pidgeon-holer"}}}
