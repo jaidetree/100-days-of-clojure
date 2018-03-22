@@ -123,6 +123,11 @@
     (is (= (pipe-exception inc (exception 0)) 1))
     (is (= (pipe-exception inc (unexpected 0)) (unexpected 0)))))
 
+(deftest tap-test
+  (testing "Runs a function against an either and returns the either"
+    (is (= (with-out-str (tap println (expected "hi"))) "hi\n"))
+    (is (= (tap identity (expected "hi")) (expected "hi")))))
+
 (deftest combination-test
   (testing "Maybe expected combines with on-expected"
     (is (= (->> (maybe "hello world")
