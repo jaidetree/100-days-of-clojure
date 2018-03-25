@@ -12,12 +12,13 @@
   "Register the NYCT Protobuf extension.
   Returns a registry instance."
   []
-  (NyctSubway/registerAllExtensions (ExtensionRegistry/newInstance)))
+  (doto
+    (ExtensionRegistry/newInstance)
+    NyctSubway/registerAllExtensions))
 
 (defn bytestream->feed
   [feed-stream]
-  (->> (GtfsRealtime$FeedMessage/parseFrom feed-stream (create-registry))
-       (.getEntityList)))
+  (->> (GtfsRealtime$FeedMessage/parseFrom feed-stream (create-registry))))
 
 (defn get-url
   [config]
@@ -26,14 +27,17 @@
     (:token config)))
 
 (defn -main []
-  (spit "data.secret.txt" "")
+  (spit "full-data.secret.txt" "")
   (let [config (get-config "dev.secret.edn")]
     (as-> (client/get (get-url config) {:as :byte-array}) $
           (:body $)
           (bytestream->feed $)
-          (filter #(.hasTripUpdate %) $)
-          (map #(.getTripUpdate %) $)
-          (take 1 $)
-          (doseq [item $]
-            (println item)
-            (spit "data.secret.txt" item :append true)))))
+          ; (filter #(.hasTripUpdate %) $)
+          ; (map #(.getTripUpdate %) $)
+          ; (drop 2 $)
+          ; (take 1 $)
+          (doto $ println)
+          (spit "full-data.secret.txt" $ :append true))))
+          ; (doseq [item $]
+          ;   (println item)
+          ;   (spit "data.secret.txt" item :append true)))))
