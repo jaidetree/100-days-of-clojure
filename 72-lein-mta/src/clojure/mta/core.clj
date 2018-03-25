@@ -1,15 +1,22 @@
 (ns mta.core
   (:require [clj-http.client :as client]
             [cheshire.core :as json])
-  (:import (com.google.transit.realtime GtfsRealtime$FeedMessage NyctSubway)))
+  (:import (com.google.transit.realtime GtfsRealtime$FeedMessage NyctSubway)
+           (com.google.protobuf ExtensionRegistry)))
 
 (defn get-config
   [filename]
   (read-string (slurp filename)))
 
-(defn str->feed
-  [feed-str]
-  (->> (GtfsRealtime$FeedMessage/parseFrom feed-str)
+(defn create-registry
+  "Register the NYCT Protobuf extension.
+  Returns a registry instance."
+  []
+  (NyctSubway/registerAllExtensions (ExtensionRegistry/newInstance)))
+
+(defn bytestream->feed
+  [feed-stream]
+  (->> (GtfsRealtime$FeedMessage/parseFrom feed-stream (create-registry))
        (.getEntityList)))
 
 (defn get-url
@@ -23,11 +30,9 @@
   (let [config (get-config "dev.secret.edn")]
     (as-> (client/get (get-url config) {:as :byte-array}) $
           (:body $)
-          (str->feed $)
+          (bytestream->feed $)
           (filter #(.hasTripUpdate %) $)
           (map #(.getTripUpdate %) $)
-          (map #(.getTrip %) $)
-          (map #(.getTripId %) $)
           (take 1 $)
           (doseq [item $]
             (println item)
