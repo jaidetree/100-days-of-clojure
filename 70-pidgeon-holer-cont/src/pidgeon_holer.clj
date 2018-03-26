@@ -93,7 +93,7 @@
   ([f value]
    (try
      (let [results (f value)]
-       (forward (f value)))
+       (forward results))
      (catch Exception e
        (exception e)))))
 
@@ -112,7 +112,7 @@
 (defn to-unexpected
   "Transform the unexpected value in an [:either unexpected-value :expected]"
   ([f]
-   (fn [results] (to-unexpected f results)))
+   (fn [input] (to-unexpected f input)))
   ([f input]
    (if (unexpected? input)
      (forward-using unexpected f (get-unexpected input))
@@ -121,7 +121,7 @@
 (defn on-unexpected
   "When the incoming either is unexpected use the given function to make it expected."
   ([f]
-   (fn [results] (on-unexpected f results)))
+   (fn [input] (on-unexpected f input)))
   ([f input]
    (if (unexpected? input)
      (forward f (get-unexpected input))
@@ -131,7 +131,7 @@
   "When the incoming either is expected use the given function against the
    expected value"
   ([f]
-   (fn [results] (on-expected f results)))
+   (fn [input] (on-expected f input)))
   ([f input]
    (if (expected? input)
      (forward f (get-expected input))
@@ -142,7 +142,7 @@
   the exception value.
   Returns another exception value."
   ([f]
-   (fn [results] (to-exception f results)))
+   (fn [input] (to-exception f input)))
   ([f input]
    (if (exception? input)
        (forward-using exception f (get-exception input))
@@ -232,22 +232,25 @@
      input)))
 
 (defn tap-expected
-  "Run a function against an expected either's value but return the expected either."
+  "Run a function against an expected either's value.
+  Returns the expected either."
   ([f]
-   (fn [input] (tap f input)))
+   (fn [input] (tap-expected f input)))
   ([f input]
-   (doto input (on-expected f))))
+   (doto input ((on-expected f)))))
 
 (defn tap-unexpected
-  "Run a function against an unexpected either's value but return the unexpected either."
+  "Run a function against an unexpected either's value.
+  Returns the unexpected either."
   ([f]
-   (fn [input] (tap f input)))
+   (fn [input] (tap-unexpected f input)))
   ([f input]
-   (doto input (on-unexpected f))))
+   (doto input ((on-unexpected f)))))
 
 (defn tap-exception
-  "Run a function against an exception either's value but return the exception either."
+  "Run a function against an exception either's value
+  Returns the exception either."
   ([f]
-   (fn [input] (tap f input)))
+   (fn [input] (tap-exception f input)))
   ([f input]
-   (doto input (on-exception f))))
+   (doto input ((on-exception f)))))

@@ -17,18 +17,18 @@
 (deftest maybe-test
   (testing "Returns expected if value is truthy"
     (is (= (maybe true) [:either :unexpected true :exception])))
-    (is (= (maybe 0) [:either :unexpected 0 :exception]))
-    (is (= (maybe "hello") [:either :unexpected "hello" :exception]))
+  (is (= (maybe 0) [:either :unexpected 0 :exception]))
+  (is (= (maybe "hello") [:either :unexpected "hello" :exception]))
   (testing "Returns unexpected if value is falsey"
     (is (= (maybe false) [:either false :expected :exception])))
-    (is (= (maybe nil) [:either nil :expected :exception]))
+  (is (= (maybe nil) [:either nil :expected :exception]))
   (testing "Returns unexpected if value is exception"
     (let [err (Exception. "Error")]
       (is (= (maybe err) [:either err :expected :exception])))))
 
 (deftest either?-test
   (testing "Returns true if value == :either"
-    (is (= (either? :either) true))))
+    (is (= (either? [:either]) true))))
 
 (deftest unexpected?-test
   (testing "Returns true if unexpected list"
@@ -36,7 +36,7 @@
 
 (deftest expected?-test
   (testing "Returns true if expected list"
-    (is (= (expected? [:either :unexpected :expected :exception]) true))))
+    (is (= (expected? [:either :unexpected :hi :exception]) true))))
 
 (deftest exception?-test
   (testing "Returns true if exception list"
@@ -48,7 +48,7 @@
            [:either 1 :expected :exception])))
   (testing "Returns curried function if only given one arg"
     (is (= ((to-unexpected inc) [:either 0 :expected :exception])))
-           [:either 1 :expected :exception]))
+    [:either 1 :expected :exception]))
 
 (deftest on-unexpected-test
   (testing "Returns expected value from unexpected value"
@@ -96,6 +96,59 @@
     (is (= ((when-expected identity inc) (expected nil))
            [:either :unexpected nil :exception]))))
 
+(deftest get-value-test
+  (testing "Returns the value of the given either"
+    (is (= (get-value (expected :hi)) :hi))
+    (is (= (get-value (unexpected :hi)) :hi))
+    (is (= (get-value (exception :hi)) :hi))))
+
+(deftest pipe-test
+  (testing "Returns the result of applying the given f to the value of the either"
+    (is (= (pipe inc (expected 0)) 1))
+    (is (= (pipe inc (unexpected 0)) 1))
+    (is (= (pipe inc (exception 0)) 1))))
+
+(deftest pipe-expected-test
+  (testing "Returns the result of applying function to expected value"
+    (is (= (pipe-expected inc (expected 0)) 1))
+    (is (= (pipe-expected inc (unexpected 0)) (unexpected 0)))))
+
+(deftest pipe-unexpected-test
+  (testing "Returns the result of applying function to unexpected value"
+    (is (= (pipe-unexpected inc (unexpected 0)) 1))
+    (is (= (pipe-unexpected inc (expected 0)) (expected 0)))))
+
+(deftest pipe-exception-test
+  (testing "Returns the result of applying function to exception value"
+    (is (= (pipe-exception inc (exception 0)) 1))
+    (is (= (pipe-exception inc (unexpected 0)) (unexpected 0)))))
+
+(deftest tap-test
+  (testing "Runs a function against an either and returns either"
+    (is (= (with-out-str (tap println (expected "hi"))) "hi\n"))
+    (is (= (tap identity (expected "hi")) (expected "hi")))))
+
+(deftest tap-expected-test
+  (testing "Runs a function against an expected and returns either"
+    (is (= (with-out-str (tap-expected println (expected "hi"))) "hi\n"))
+    (is (= (tap-expected identity (expected "hi")) (expected "hi")))
+    (is (= (tap-expected identity (unexpected "hi")) (unexpected "hi")))))
+    (is (= (with-out-str (tap-expected println (unexpected "hi"))) ""))
+
+(deftest tap-unexpected-test
+  (testing "Runs a function against an unexpected and returns either"
+    (is (= (with-out-str (tap-unexpected println (unexpected "hi"))) "hi\n"))
+    (is (= (tap-unexpected identity (unexpected "hi")) (unexpected "hi")))
+    (is (= (tap-unexpected identity (expected "hi")) (expected "hi")))))
+    (is (= (with-out-str (tap-unexpected println (expected "hi"))) ""))
+
+(deftest tap-exception-test
+  (testing "Runs a function against an exception and returns either"
+    (is (= (with-out-str (tap-exception println (exception "hi"))) "hi\n"))
+    (is (= (tap-exception identity (exception "hi")) (exception "hi")))
+    (is (= (tap-exception identity (expected "hi")) (expected "hi")))))
+    (is (= (with-out-str (tap-exception println (expected "hi"))) ""))
+
 (deftest combination-test
   (testing "Maybe expected combines with on-expected"
     (is (= (->> (maybe "hello world")
@@ -125,3 +178,5 @@
 
 (defn -main []
   (run-tests 'pidgeon-holer-test))
+
+(-main)
