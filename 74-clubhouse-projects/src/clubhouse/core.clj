@@ -42,6 +42,5 @@
   []
   (pprint
    (->> (fetch-clubhouse-projects)
+        (take 2)
         (mapcat fetch-clubhouse-stories))))
-
-(-main)
