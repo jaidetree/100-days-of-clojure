@@ -51,27 +51,24 @@
   "Final middleware to stop the chain."
   [handler]
   (fn [[req res]]
-    (handler [req (assoc res :done true)])))
+    [req (assoc res :done true)]))
 
 (defn update-6
   "Middleware that should never run"
   [handler]
   (fn [[req res]]
-    (if (:done res)
-      (handler [req res])
-      (do
-        (println "Running middleware 6")
-        (throw (Exception. "Eeek I was not supposed to run!"))))))
+    (println "Running middleware 6")
+    (throw (Exception. "Eeek I was not supposed to run!"))))
 
-(def app (-> handler
-             update-6
-             update-5
-             update-4
-             update-3
-             update-2
-             update-1))
+(def middleware (-> handler
+                    update-6
+                    update-5
+                    update-4
+                    update-3
+                    update-2
+                    update-1))
 
 (defn -main
   []
   (println "Running middleware")
-  (println (app [{:method :GET} {:done false}])))
+  (println (middleware [{:method :GET} {:done false}])))
