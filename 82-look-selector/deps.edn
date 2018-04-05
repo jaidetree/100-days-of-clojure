@@ -1,0 +1,3 @@
+{:deps
+  {dev.repl {:local/root "../shared"}
+   dev.conf {:local/root "../shared"}}}
