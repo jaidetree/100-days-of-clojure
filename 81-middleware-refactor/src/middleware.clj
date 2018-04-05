@@ -2,7 +2,7 @@
 
 ;; Project Goal: Write a middleware implementation similar to Node JS's
 ;;               Express webserver middleware)
-;; UPDATE: 3/4/2018 - Received great feedback and better alternatives
+;; UPDATE: 4/4/2018 - Received great feedback and better alternatives
 ;;         https://www.reddit.com/r/Clojure/comments/88xbx4/implementing_node_js_express_middleware_in/)
 
 (defn handler
