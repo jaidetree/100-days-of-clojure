@@ -24,7 +24,7 @@
 
 (defn -main [& args]
   (q/defsketch palette
-    :title "The Sleepycat Collection"
+    :title "The Sleepycat Palette"
     :size [500 500]
     :setup setup
     :draw draw))
