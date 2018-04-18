@@ -2,7 +2,7 @@
   (:require [clj-http.client :as client]
             [cheshire.core :as json]
             [mta.mta-stations]
-            [clojure.pprint :refer [print-table]]
+            [clojure.pprint :refer [print-table pprint]]
             [clojure.reflect :as r])
   (:import (com.google.transit.realtime GtfsRealtime$FeedMessage NyctSubway)
            (com.google.protobuf ExtensionRegistry)))
@@ -34,27 +34,35 @@
   (let [now (quot (System/currentTimeMillis) 1000)]
     (int (/ (- arrival now) 60))))
 
+(defn trip->direction
+  [trip]
+  (-> trip
+      (.getExtension NyctSubway/nyctTripDescriptor)
+      (.getDirection)
+      (.toString)))
+
 (defn trip->train
-  [stations train direction stop]
-  (println (take 1 stations))
+  [stations trip stop]
   (let [stop-id (.getStopId stop)
         station (mta-stations/find-station stop-id stations)
-        arrives (calc-arrival (.getTime (.getArrival stop)))]
+        arrives (calc-arrival (.getTime (.getArrival stop)))
+        train (.getRouteId trip)
+        direction (trip->direction trip)]
     {:train train
      :stop-id stop-id
      :direction direction
-     :station station
+     :station-id (:stop-id station)
+     :station (:name station)
+     :line (:line station)
+     :latitude (:latitude station)
+     :longitude (:longitude station)
      :arrives arrives}))
 
 (defn parse-train
   [stations trip-update]
   (let [trip (.getTrip trip-update)
-        train (.getRouteId trip)
-        direction "NORTH"
         stops (.getStopTimeUpdateList trip-update)]
-    ; (print-table (:members (r/reflect trip)))
-    (print (.getDirectionId trip))
-    (map #(trip->train stations train direction %) stops)))
+    (map #(trip->train stations trip %) stops)))
 
 (defn -main []
   (let [config (get-config "dev.secret.edn")
@@ -68,11 +76,10 @@
           (mapcat #(parse-train stations %) $)
           ; (map #(.getTripUpdate %) $)
           ; (drop 2 $)
-          (take 1 $)
-          (doseq [item $]
-            (println item)))))
+          ; (take 1 $)
+          (print-table [:train :direction :station :station-id :arrives :line :latitude :longitude] $))))
+          ; (doseq [item $]
+          ;   (pprint item)))))
           ; (doseq [item $]
           ;   (println item)
           ;   (spit "data.secret.txt" item :append true)))))
-
-(-main)
