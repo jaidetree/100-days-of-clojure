@@ -59,4 +59,5 @@
 
 (stest/instrument `mult)
 (-main)
-(pprint (stest/abbrev-result (first (stest/check `mult))))
+(pprint (keep (stest/abbrev-result (first (stest/check `mult))) [:sym :failure]))
+nil
