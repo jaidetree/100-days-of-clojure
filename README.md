@@ -14,6 +14,6 @@ My 2018 100 Days of Code Project
 - [x] Atoms
 - [x] Promises
 - [x] Macros
-- [ ] Spec
-- [ ] Web Server
+- [X] Spec
+- [X] Web Server
 - [ ] ClojureScript
