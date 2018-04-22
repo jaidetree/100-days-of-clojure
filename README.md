@@ -16,4 +16,4 @@ My 2018 100 Days of Code Project
 - [x] Macros
 - [X] Spec
 - [X] Web Server
-- [ ] ClojureScript
+- [X] ClojureScript
